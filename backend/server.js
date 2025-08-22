@@ -14,10 +14,18 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration - restrict to VPS IP and localhost
 app.use(cors({
-  origin: "*",
+  origin: [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://162.43.30.178:3000',
+    'http://162.43.30.178',
+    'https://162.43.30.178',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
 }));
 
 // Rate limiting
@@ -71,9 +79,9 @@ const startServer = async () => {
     // Optionally uncomment next line if you want to ensure tables: await prisma.$executeRaw`SELECT 1`;
     app.listen(PORT, () => {
       console.log(`🚀 Pikapika Backend server running on port ${PORT}`);
-      console.log(`📡 API available at http://localhost:${PORT}/api`);
+      console.log(`📡 API available at http://162.43.30.178:${PORT}/api`);
       console.log(`🔒 JWT Secret configured: ${process.env.JWT_SECRET ? 'Yes' : 'No'}`);
-      console.log(`🌐 CORS Origin: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+      console.log(`🌐 CORS Origin: ${process.env.FRONTEND_URL || 'http://162.43.30.178:3000'}`);
       console.log(`💾 Database URL: ${process.env.DATABASE_URL ? 'configured' : 'missing'}`);
     });
   } catch (error) {

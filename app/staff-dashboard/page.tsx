@@ -120,7 +120,7 @@ export default function StaffDashboard() {
 
       // Verify token is valid by making a test API call
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/verify`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         
@@ -212,7 +212,7 @@ export default function StaffDashboard() {
   // Fetch staff's uploaded images (handle new grouped structure)
   const fetchUploadedImages = async () => {
     const token = localStorage.getItem('auth-token')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
@@ -260,7 +260,7 @@ export default function StaffDashboard() {
     setLoadingFacilities(true)
     try {
       const token = localStorage.getItem('auth-token')
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities`, {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       
@@ -288,7 +288,7 @@ export default function StaffDashboard() {
     setLoadingPastRecords(true)
     try {
       const token = localStorage.getItem('auth-token')
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/staff-records`, {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/staff-records`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       
@@ -451,7 +451,7 @@ export default function StaffDashboard() {
       const token = localStorage.getItem('auth-token')
 
       // Use batch delete endpoint for better performance
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/batch`, {
+              const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/batch`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -467,7 +467,7 @@ export default function StaffDashboard() {
         const ids = Array.from(selectedImages)
         for (let i = 0; i < ids.length; i++) {
           const id = ids[i]
-          const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/${id}`, {
+          const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/${id}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
           })
@@ -497,7 +497,7 @@ export default function StaffDashboard() {
   const fetchUploadedImagesForRecord = useCallback(async (recId: string) => {
     try {
       const token = localStorage.getItem('auth-token')
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-records/${recId}/images`, {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-records/${recId}/images`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (res.ok) {
@@ -606,7 +606,7 @@ export default function StaffDashboard() {
   const getCleaningRecord = async () => {
     const today = new Date().toISOString().slice(0, 10)
     const token = localStorage.getItem('auth-token')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-records/find-or-create`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-records/find-or-create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -657,7 +657,7 @@ export default function StaffDashboard() {
         // Upload with progress tracking
         await new Promise<void>((resolve, reject) => {
           const xhr = new XMLHttpRequest()
-          xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/upload`)
+          xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/upload`)
           xhr.setRequestHeader('Authorization', `Bearer ${token}`)
           
           xhr.upload.onprogress = (e) => {
@@ -711,7 +711,7 @@ export default function StaffDashboard() {
   // Delete image
   const handleDeleteImage = async (imageId: number) => {
     const token = localStorage.getItem('auth-token')
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/${imageId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/${imageId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     })
@@ -723,7 +723,7 @@ export default function StaffDashboard() {
     const token = localStorage.getItem('auth-token')
     const formData = new FormData()
     formData.append('image', file)
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/${imageId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/${imageId}`, {
       method: 'PATCH',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData

@@ -1,6 +1,6 @@
 // Authentication service for frontend-backend communication
 
-const API_BASE_URL = 'http://localhost:8888/api';
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL || 'http://162.43.30.178:3001'}/api`;
 
 export interface LoginData {
   userId?: string; // Made optional to support facilityId login

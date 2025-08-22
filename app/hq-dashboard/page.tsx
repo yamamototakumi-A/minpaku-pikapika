@@ -388,7 +388,7 @@ export default function HQDashboard() {
         console.log('Request body:', { imageIds })
         console.log('====================================')
         
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/batch-delete`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/batch-delete`, {
           method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -490,7 +490,7 @@ export default function HQDashboard() {
     setIsModalOpen(true)
     setLoadingRecords(true)
     const token = localStorage.getItem('auth-token')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities/${facility.id}/cleaning-records`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities/${facility.id}/cleaning-records`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
@@ -503,7 +503,7 @@ export default function HQDashboard() {
   // Fetch images for a cleaning record
   const fetchImagesForRecord = async (recordId: string) => {
     const token = localStorage.getItem('auth-token')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-records/${recordId}/images`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-records/${recordId}/images`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
@@ -529,7 +529,7 @@ export default function HQDashboard() {
   // Delete image handler
   const handleDeleteImage = async (type: 'before' | 'after', imageUrl: string, recordId: string) => {
     const token = localStorage.getItem('auth-token')
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-records/${recordId}/image`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-records/${recordId}/image`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -549,7 +549,7 @@ export default function HQDashboard() {
     formData.append('image', file)
     formData.append('oldImageUrl', oldImageUrl)
     formData.append('type', type)
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-records/${recordId}/image`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-records/${recordId}/image`, {
       method: 'PATCH',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData
@@ -606,7 +606,7 @@ export default function HQDashboard() {
         
         await new Promise<void>((resolve, reject) => {
           const xhr = new XMLHttpRequest()
-          xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities/${selectedFacility.facilityId}/receipts`)
+          xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities/${selectedFacility.facilityId}/receipts`)
           xhr.setRequestHeader('Authorization', `Bearer ${token}`)
           
           xhr.upload.onprogress = (e) => {
@@ -756,7 +756,7 @@ export default function HQDashboard() {
     // Fetch receipts for this facility
     try {
       const token = localStorage.getItem('auth-token')
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities/${facility.facilityId}/receipts`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities/${facility.facilityId}/receipts`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       
@@ -793,7 +793,7 @@ export default function HQDashboard() {
     
     try {
       const token = localStorage.getItem('auth-token')
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/receipts/${receiptId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/receipts/${receiptId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -820,7 +820,7 @@ export default function HQDashboard() {
       const token = localStorage.getItem('auth-token')
       const ids = Array.from(selectedReceiptIds)
       
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/receipts/batch-delete`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/receipts/batch-delete`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ receiptIds: ids })
@@ -837,7 +837,7 @@ export default function HQDashboard() {
         // Fallback: sequential delete
         let success = 0
         for (let i = 0; i < ids.length; i++) {
-          const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/receipts/${ids[i]}`, { 
+          const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/receipts/${ids[i]}`, { 
             method: 'DELETE', 
             headers: { 'Authorization': `Bearer ${token}` } 
           })
@@ -873,7 +873,7 @@ export default function HQDashboard() {
 
       // Verify token is valid by making a test API call
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/verify`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         
@@ -901,7 +901,7 @@ export default function HQDashboard() {
       setLoadingCompanies(true)
       try {
         const token = localStorage.getItem('auth-token')
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/companies`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/companies`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         if (res.ok) {
@@ -961,7 +961,7 @@ export default function HQDashboard() {
       const companyId = company.companyId
       console.log('Fetching facilities for company:', companyId)
       
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/companies/${companyId}/facilities`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/companies/${companyId}/facilities`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (res.ok) {
@@ -984,7 +984,7 @@ export default function HQDashboard() {
       // Use companyId directly (it should already be the correct format)
       console.log('Fetching hierarchy for company:', companyId)
       
-      const url = new URL(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/company/uploads/hierarchy`)
+      const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/company/uploads/hierarchy`)
       url.searchParams.append('companyId', companyId.toString())
       if (facilityFilter) {
         url.searchParams.append('facilityId', facilityFilter)

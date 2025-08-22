@@ -100,7 +100,7 @@ export default function ClientDashboard() {
     setLoadingHierarchy(true)
     try {
       const token = localStorage.getItem('auth-token')
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/client/hierarchy`, {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/client/hierarchy`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       
@@ -151,7 +151,7 @@ export default function ClientDashboard() {
 
       // Verify token is valid by making a test API call
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/verify`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         

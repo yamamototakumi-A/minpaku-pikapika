@@ -39,7 +39,7 @@ export default function IndividualRegister() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await fetch('http://localhost:8888/api/auth/companies')
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://162.43.30.178:3001'}/api/auth/companies`)
         if (response.ok) {
           const data = await response.json()
           setCompanies(data.companies || [])

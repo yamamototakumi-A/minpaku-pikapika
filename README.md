@@ -75,9 +75,9 @@ A comprehensive web-based cleaning management system built with Next.js, React, 
 3. **Environment Setup**
    ```bash
    # Frontend (.env.local)
-   NEXT_PUBLIC_API_URL=http://localhost:8888
+   NEXT_PUBLIC_API_URL=http://162.43.30.178:3001
    
-   # Backend (.env)
+   # Backend (backend/.env)
    DATABASE_URL="postgresql://username:password@localhost:5432/pikapika_cleaning"
    JWT_SECRET="your-jwt-secret-key"
    GOOGLE_CLOUD_PROJECT_ID="your-gcp-project-id"
@@ -106,7 +106,22 @@ A comprehensive web-based cleaning management system built with Next.js, React, 
 
 6. **Access the application**
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8888
+   - Backend API: http://localhost:3001
+
+## 🌐 **VPS Deployment (IP: 162.43.30.178)**
+
+### Global Access Configuration
+- **Backend API**: `http://162.43.30.178:3001`
+- **Frontend**: `http://162.43.30.178:3000`
+- **CORS**: Restricted to VPS IP and localhost only
+
+### Quick VPS Setup
+1. Create `backend/.env` with production variables
+2. Create `.env.local` with `NEXT_PUBLIC_API_URL=http://162.43.30.178:3001`
+3. Open ports 3001 and 3000 on VPS firewall
+4. Start services and access globally
+
+See `VPS_DEPLOYMENT_CONFIG.md` for detailed deployment instructions.
 
 ## 🏗️ **System Architecture**
 

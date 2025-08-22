@@ -148,7 +148,7 @@ export default function BranchDashboard() {
 
       // Verify token is valid by making a test API call
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/verify`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         
@@ -177,7 +177,7 @@ export default function BranchDashboard() {
       setLoadingFacilities(true)
       try {
         const token = localStorage.getItem('auth-token')
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities/branch`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities/branch`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         if (res.ok) {
@@ -192,7 +192,7 @@ export default function BranchDashboard() {
       setLoadingHierarchy(true)
       try {
         const token = localStorage.getItem('auth-token')
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/company/uploads/hierarchy`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/company/uploads/hierarchy`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         if (res.ok) {
@@ -489,7 +489,7 @@ export default function BranchDashboard() {
   // Fetch cleaning records for a facility
   const fetchRecordsForFacility = async (facilityId: string) => {
     const token = localStorage.getItem('auth-token')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities/${facilityId}/cleaning-records`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities/${facilityId}/cleaning-records`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
@@ -502,7 +502,7 @@ export default function BranchDashboard() {
   // Fetch images for a cleaning record
   const fetchImagesForRecord = async (recordId: string) => {
     const token = localStorage.getItem('auth-token')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-records/${recordId}/images`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-records/${recordId}/images`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
@@ -517,12 +517,12 @@ export default function BranchDashboard() {
   // Only keep the first occurrence of these implementations:
   const handleDeleteImage = async (imageId: number) => {
     const token = localStorage.getItem('auth-token')
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/${imageId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/${imageId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     })
     // Refresh hierarchy data instead
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/company/uploads/hierarchy`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/company/uploads/hierarchy`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
@@ -535,13 +535,13 @@ export default function BranchDashboard() {
     const token = localStorage.getItem('auth-token')
     const formData = new FormData()
     formData.append('image', file)
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/${imageId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/${imageId}`, {
       method: 'PATCH',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData
     })
     // Refresh hierarchy data instead
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/company/uploads/hierarchy`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/company/uploads/hierarchy`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
@@ -564,7 +564,7 @@ export default function BranchDashboard() {
     // Fetch receipts and group by YYYY-MM
     try {
       const token = localStorage.getItem('auth-token')
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities/${facilityId}/receipts`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities/${facilityId}/receipts`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (res.ok) {
@@ -692,7 +692,7 @@ export default function BranchDashboard() {
       const ids = Array.from(selectedImageIds)
       const token = localStorage.getItem('auth-token')
       // Prefer POST endpoint for better compatibility with bodies
-      const batchUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/batch-delete`
+              const batchUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/batch-delete`
       const res = await fetch(batchUrl, {
         method: 'POST',
         headers: {
@@ -704,7 +704,7 @@ export default function BranchDashboard() {
 
       if (!res.ok) {
         // Fallback: try DELETE /batch (some environments support it)
-        const resDelete = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/batch`, {
+        const resDelete = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/batch`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -717,7 +717,7 @@ export default function BranchDashboard() {
           // Final fallback: sequential delete with progress
           let success = 0
           for (let i = 0; i < ids.length; i++) {
-            const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/cleaning-images/${ids[i]}`, {
+            const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/cleaning-images/${ids[i]}`, {
               method: 'DELETE',
               headers: { 'Authorization': `Bearer ${token}` }
             })
@@ -734,7 +734,7 @@ export default function BranchDashboard() {
       setSelectedImageIds(new Set())
       // Refresh hierarchy
       const token = localStorage.getItem('auth-token')
-      const res2 = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/company/uploads/hierarchy`, {
+              const res2 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/company/uploads/hierarchy`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (res2.ok) {
@@ -770,7 +770,7 @@ export default function BranchDashboard() {
         
         await new Promise<void>((resolve, reject) => {
           const xhr = new XMLHttpRequest()
-          xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/facilities/${selectedFacilityId}/receipts`)
+          xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL}/api/auth/facilities/${selectedFacilityId}/receipts`)
           xhr.setRequestHeader('Authorization', `Bearer ${token}`)
           
           xhr.upload.onprogress = (e) => {
@@ -1435,7 +1435,7 @@ export default function BranchDashboard() {
                               <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                                 <Button size="sm" variant="outline" className="h-8 w-8 p-0 rounded-lg border-red-200 text-red-600 hover:bg-red-50" onClick={async () => {
                                   const token = localStorage.getItem('auth-token')
-                                  await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/receipts/${receipt.id}`, {
+                                  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/receipts/${receipt.id}`, {
                                     method: 'DELETE',
                                     headers: { 'Authorization': `Bearer ${token}` }
                                   })
@@ -1462,7 +1462,7 @@ export default function BranchDashboard() {
                           setReceiptDeleteProgress(0)
                           const token = localStorage.getItem('auth-token')
                           const ids = Array.from(selectedReceiptIds)
-                          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/receipts/batch-delete`, {
+                          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/receipts/batch-delete`, {
                             method: 'POST',
                             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                             body: JSON.stringify({ receiptIds: ids })
@@ -1471,7 +1471,7 @@ export default function BranchDashboard() {
                             // Fallback: sequential delete with progress
                             let success = 0
                             for (let i = 0; i < ids.length; i++) {
-                              const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888'}/api/auth/receipts/${ids[i]}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } })
+                              const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/receipts/${ids[i]}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } })
                               if (r.ok) success++
                               setReceiptDeleteProgress(Math.round(((i + 1) / ids.length) * 100))
                             }

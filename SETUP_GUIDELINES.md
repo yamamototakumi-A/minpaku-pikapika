@@ -1,4 +1,15 @@
-# Cleaning Guidelines Setup Guide
+# Setup Guidelines for Pikapika Cleaning System
+
+## Environment Variables
+
+### Frontend (.env.local)
+```bash
+# For local development
+NEXT_PUBLIC_API_URL=http://localhost:3001
+
+# For VPS production deployment
+NEXT_PUBLIC_API_URL=http://162.43.30.178:3001
+```
 
 ## Overview
 This system stores cleaning guideline images in Google Cloud Storage and displays them dynamically in the staff dashboard.
