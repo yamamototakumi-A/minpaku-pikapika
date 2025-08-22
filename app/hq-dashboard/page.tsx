@@ -1058,39 +1058,39 @@ export default function HQDashboard() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <main className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-orange-800">本社</h1>
-            <p className="text-gray-700 mt-2 sm:mt-4">全社の清掃記録を一元管理</p>
+          <div className="text-center mb-4 sm:mb-6 lg:mb-8">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-800">本社</h1>
+            <p className="text-gray-700 mt-1 sm:mt-2 lg:mt-4 text-sm sm:text-base">全社の清掃記録を一元管理</p>
           </div>
 
-          <div className="flex gap-6 sm:gap-8">
-            {/* Left Sidebar - Company Selection (30%) */}
-            <div className="w-[30%] min-w-[300px]">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+            {/* Left Sidebar - Company Selection (Full width on mobile, 30% on desktop) */}
+            <div className="w-full lg:w-[30%] lg:min-w-[300px] order-2 lg:order-1">
               <Card className="bg-white shadow-lg border-4 border-blue-300 h-full">
                 
-                <CardHeader>
+                <CardHeader className="p-3 sm:p-4 lg:p-6">
                   <CardTitle className="text-lg sm:text-xl font-bold text-orange-600 flex items-center space-x-2">
                     <Building2 className="h-5 w-5" />
                     <span>加盟会社一覧</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 sm:p-6">
-                  <div className="space-y-3 sm:space-y-4">
+                <CardContent className="p-3 sm:p-4 lg:p-6">
+                  <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                     {loadingCompanies ? (
-                      <div className="text-center py-6 sm:py-8">
+                      <div className="text-center py-4 sm:py-6 lg:py-8">
                         <p className="text-gray-500 text-sm sm:text-base">会社を読み込み中...</p>
                       </div>
                     ) : companies.length === 0 ? (
-                      <div className="text-center py-6 sm:py-8">
+                      <div className="text-center py-4 sm:py-6 lg:py-8">
                         <p className="text-gray-500 text-sm sm:text-base">加盟会社が見つかりません</p>
                       </div>
                     ) : (
                       companies.map((company) => (
                         <div 
                           key={company.id} 
-                          className={`border-2 rounded-lg p-3 sm:p-4 cursor-pointer transition-colors ${
+                          className={`border-2 rounded-lg p-2 sm:p-3 lg:p-4 cursor-pointer transition-colors ${
                             selectedCompany?.id === company.id 
                               ? "border-orange-500 bg-orange-50" 
                               : company.type === '本社'
@@ -1099,7 +1099,7 @@ export default function HQDashboard() {
                           }`}
                           onClick={() => handleCompanyClick(company)}
                         >
-                          <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center justify-between mb-1 sm:mb-2">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
                                 <h3 className="font-semibold text-blue-600 text-sm sm:text-base">{company.companyId}</h3>
@@ -1126,8 +1126,8 @@ export default function HQDashboard() {
               </Card>
             </div>
 
-            {/* Right Content Area - Branch Dashboard (70%) */}
-            <div className="flex-1">
+            {/* Right Content Area - Branch Dashboard (Full width on mobile, 70% on desktop) */}
+            <div className="w-full lg:flex-1 order-1 lg:order-2">
               {selectedCompany ? (
                   <Card className="bg-white shadow-lg border-4 border-blue-300 h-full">
                     <CardHeader>
@@ -1361,11 +1361,14 @@ export default function HQDashboard() {
                 </Card>
               ) : (
                 <Card className="bg-white shadow-lg border-4 border-blue-300 h-full">
-                  <CardContent className="flex items-center justify-center h-full p-6 sm:p-8">
+                  <CardContent className="flex items-center justify-center h-full p-4 sm:p-6 lg:p-8">
                     <div className="text-center">
-                      <Building2 className="h-12 sm:h-16 w-12 sm:w-16 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">会社を選択してください</h3>
-                      <p className="text-sm sm:text-base text-gray-500">左側から会社を選択すると、その会社の清掃記録が表示されます</p>
+                      <Building2 className="h-8 w-8 sm:h-12 sm:w-12 lg:h-16 lg:w-16 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                      <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-600 mb-2">会社を選択してください</h3>
+                      <p className="text-xs sm:text-sm lg:text-base text-gray-500 px-2 sm:px-0">
+                        <span className="block lg:hidden">下の会社一覧から会社を選択すると、その会社の清掃記録が表示されます</span>
+                        <span className="hidden lg:block">左側から会社を選択すると、その会社の清掃記録が表示されます</span>
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
