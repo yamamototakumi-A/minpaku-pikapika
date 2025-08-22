@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id             Int             @id @default(autoincrement())
+  companyId      String          @unique @map("company_id")
+  role           CompanyRole?
+  address        String
+  passwordHash   String          @map("password_hash")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @default(now()) @map("updated_at")
+  line_id        String?
+  cleaningImages CleaningImage[]
+  facilities     Facility[]
+  receipts       ReceiptImage[]
+  users          User[]
+
+  @@map("companies")
+}
+
+model User {
+  id              Int                 @id @default(autoincrement())
+  surname         String?
+  mainName        String?             @map("main_name")
+  companyId       Int?                @map("company_id")
+  role            String?
+  userId          String              @unique @map("user_id")
+  passwordHash    String              @map("password_hash")
+  address         String?
+  prefectureCity  String?             @map("prefecture_city")
+  addressDetail   String?             @map("address_detail")
+  userType        UserType            @map("user_type")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @default(now()) @map("updated_at")
+  facilityId      String?             @map("facility_id")
+  lineUserId      String?             @map("line_user_id")
+  cleaningImages  CleaningImage[]     @relation("UserToCleaningImages")
+  cleaningRecords CleaningRecord[]    @relation("UserToCleaningRecords")
+  clientApps      ClientApplication[] @relation("UserToClientApplications")
+  receipts        ReceiptImage[]      @relation("UserToReceiptImages")
+  company         Company?            @relation(fields: [companyId], references: [id])
+
+  @@index([companyId], map: "idx_users_company_id")
+  @@index([userId], map: "idx_users_user_id")
+  @@index([facilityId], map: "idx_users_facility_id")
+  @@index([lineUserId], map: "idx_users_line_user_id")
+  @@map("users")
+}
+
+model Facility {
+  id             Int                 @id @default(autoincrement())
+  facilityId     String              @unique @map("facility_id")
+  companyId      Int?                @map("company_id")
+  name           String?
+  address        String?
+  createdAt      DateTime            @default(now()) @map("created_at")
+  cleaningImages CleaningImage[]
+  cleaningRecord CleaningRecord[]
+  clientApps     ClientApplication[]
+  company        Company?            @relation(fields: [companyId], references: [id])
+  receipts       ReceiptImage[]
+
+  @@index([companyId], map: "idx_facilities_company_id")
+  @@map("facilities")
+}
+
+model CleaningRecord {
+  id           Int             @id @default(autoincrement())
+  facilityId   Int             @map("facility_id")
+  roomType     String          @map("room_type")
+  roomId       Int             @map("room_id")
+  cleaningDate DateTime        @map("cleaning_date") @db.Date
+  beforeImages String[]        @map("before_images")
+  afterImages  String[]        @map("after_images")
+  staffId      Int?            @map("staff_id")
+  status       String?         @default("pending")
+  notes        String?
+  createdAt    DateTime        @default(now()) @map("created_at")
+  images       CleaningImage[]
+  facility     Facility        @relation(fields: [facilityId], references: [id])
+  staff        User?           @relation("UserToCleaningRecords", fields: [staffId], references: [id])
+
+  @@index([facilityId, cleaningDate], map: "idx_cleaning_records_facility_date")
+  @@map("cleaning_records")
+}
+
+model ClientApplication {
+  id              Int       @id @default(autoincrement())
+  clientId        Int?      @map("client_id")
+  facilityId      Int?      @map("facility_id")
+  roomType        String    @map("room_type")
+  roomId          Int       @map("room_id")
+  applicationDate DateTime  @map("application_date") @db.Date
+  status          String?   @default("pending")
+  notes           String?
+  createdAt       DateTime  @default(now()) @map("created_at")
+  client          User?     @relation("UserToClientApplications", fields: [clientId], references: [id])
+  facility        Facility? @relation(fields: [facilityId], references: [id])
+
+  @@index([clientId], map: "idx_client_applications_client_id")
+  @@map("client_applications")
+}
+
+model CleaningGuideline {
+  id                Int      @id @default(autoincrement())
+  roomType          String   @map("room_type")
+  stepNumber        Int      @map("step_number")
+  title             String?
+  description       String?
+  guidelineImageUrl String   @map("guideline_image_url")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@unique([roomType, stepNumber])
+  @@index([roomType], map: "idx_cleaning_guidelines_room_type")
+  @@map("cleaning_guidelines")
+}
+
+model CleaningImage {
+  id          Int             @id @default(autoincrement())
+  companyId   Int?            @map("company_id")
+  facilityId  Int?            @map("facility_id")
+  recordId    Int?            @map("record_id")
+  roomType    String          @map("room_type")
+  beforeAfter BeforeAfter     @map("before_after")
+  uploaderId  Int?            @map("uploader_id")
+  gcsUrl      String          @map("gcs_url")
+  uploadedAt  DateTime        @default(now()) @map("uploaded_at")
+  updatedAt   DateTime        @default(now()) @map("updated_at")
+  company     Company?        @relation(fields: [companyId], references: [id])
+  facility    Facility?       @relation(fields: [facilityId], references: [id])
+  record      CleaningRecord? @relation(fields: [recordId], references: [id])
+  uploader    User?           @relation("UserToCleaningImages", fields: [uploaderId], references: [id])
+
+  @@map("cleaning_images")
+}
+
+model ReceiptImage {
+  id         Int      @id @default(autoincrement())
+  companyId  Int?     @map("company_id")
+  facilityId Int      @map("facility_id")
+  uploaderId Int?     @map("uploader_id")
+  gcsUrl     String   @map("gcs_url")
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  year       Int      @default(0)
+  month      Int      @default(0)
+  company    Company? @relation(fields: [companyId], references: [id])
+  facility   Facility @relation(fields: [facilityId], references: [id])
+  uploader   User?    @relation("UserToReceiptImages", fields: [uploaderId], references: [id])
+
+  @@index([facilityId, year, month], map: "idx_receipts_facility_year_month")
+  @@index([companyId], map: "idx_receipts_company_id")
+  @@map("receipt_images")
+}
+
+// Logs of LINE notifications
+model LineNotification {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  message   String
+  status    String   @default("sent")
+  error     String?
+  sentAt    DateTime @default(now()) @map("sent_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId], map: "idx_line_notifications_user_id")
+  @@index([status], map: "idx_line_notifications_status")
+  @@index([sentAt], map: "idx_line_notifications_sent_at")
+  @@map("line_notifications")
+}
+
+enum CompanyRole {
+  headquarter
+  branch
+}
+
+enum UserType {
+  company
+  client
+}
+
+enum BeforeAfter {
+  before
+  after
+}
